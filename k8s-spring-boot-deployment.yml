@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: jhooq-springboot
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: jhooq-springboot
@@ -14,9 +14,40 @@ spec:
     spec:
       containers:
         - name: springboot
-          image: rahulwagh17/jhooq-docker-demo:jhooq-docker-demo
+          image: rahulwagh17/kubernetes:jhooq-k8s-springboot
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "512m"
+            limits:
+              memory: "128Mi"
+              cpu: "512m"
+
           ports:
             - containerPort: 8080
+
+          readinessProbe:
+            httpGet:
+              path: /hello
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /hello
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+          startupProbe:
+            httpGet:
+              path: /hello
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
+
           env:
             - name: PORT
               value: "8080"
