@@ -57,7 +57,7 @@ kind: Service
 metadata:
   name: jhooq-springboot
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 80
       targetPort: 8080
